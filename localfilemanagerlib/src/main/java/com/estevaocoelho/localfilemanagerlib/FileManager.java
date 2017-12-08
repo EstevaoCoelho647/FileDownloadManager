@@ -74,7 +74,12 @@ public class FileManager {
         if (FileManagerUtil.fileAlreadyExists(file)) {
             downloadCallback.OnItemDownloaded(file);
         } else {
-            new FileManagerDownloader(file, url, downloadCallback).execute();
+            try {
+                file.createNewFile();
+                new FileManagerDownloader(file, url, downloadCallback).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
