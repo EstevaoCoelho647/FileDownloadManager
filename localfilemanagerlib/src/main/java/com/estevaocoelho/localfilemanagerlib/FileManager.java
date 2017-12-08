@@ -32,7 +32,7 @@ public class FileManager {
 
     private FileManager(Application application) {
         this.application = application;
-        this.basePath = Environment.getExternalStorageDirectory().toString();
+        this.basePath = application.getApplicationContext().getExternalFilesDir("FileManagerLib").getAbsolutePath();
     }
 
     public static void create(Application application, String basePath) {
@@ -74,12 +74,7 @@ public class FileManager {
         if (FileManagerUtil.fileAlreadyExists(file)) {
             downloadCallback.OnItemDownloaded(file);
         } else {
-            try {
-                file.createNewFile();
-                new FileManagerDownloader(file, url, downloadCallback).execute();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            new FileManagerDownloader(file, url, downloadCallback).execute();
         }
     }
 
