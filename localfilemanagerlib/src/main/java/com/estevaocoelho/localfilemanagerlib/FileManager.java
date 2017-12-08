@@ -66,10 +66,7 @@ public class FileManager {
             baseFile = new File(pathToDownload);
         }
 
-        if (!baseFile.exists())
-            baseFile.mkdir();
-
-        File file = new File(baseFile.getAbsoluteFile(), fileName);
+        File file = new File(baseFile + "/" + fileName);
 
         if (FileManagerUtil.fileAlreadyExists(file)) {
             downloadCallback.OnItemDownloaded(file);
