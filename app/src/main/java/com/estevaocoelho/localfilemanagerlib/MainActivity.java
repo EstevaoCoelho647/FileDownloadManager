@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         FileManager.getFileManagerInstance().getFileFromLocalOrDownload(
                 "http://blog.fulfillinghappiness.com/wp-content/uploads/2012/05/shutterstock_79429915.jpg",
                 "success.jpg",
-                "images",
+                "images/testes",
                 new OnFileDownloadCallback() {
                     @Override
                     public void OnItemDownloaded(File file) {

@@ -20,19 +20,29 @@ public class FileManager {
      * Constructor
      *
      * @param application Application instance
-     * @param basePath    base path to download files
+     * @param basePath    Base path of directory
      */
     private FileManager(Application application, String basePath) {
         this.application = application;
         this.basePath = basePath;
     }
 
-
+    /**
+     * Constructor
+     *
+     * @param application Application instance
+     */
     private FileManager(Application application) {
         this.application = application;
-        this.basePath = application.getApplicationContext().getExternalFilesDir("FileManagerLib").getAbsolutePath();
+        this.basePath = application.getBaseContext().getExternalCacheDir().getAbsolutePath();
     }
 
+    /**
+     * Method to create a instance
+     *
+     * @param application Application instance
+     * @param basePath    Base path of directory
+     */
     public static void create(Application application, String basePath) {
         if (fileManagerInstance == null) {
             fileManagerInstance = new FileManager(application, basePath);
@@ -49,19 +59,27 @@ public class FileManager {
 
     public synchronized static FileManager getFileManagerInstance() {
         if (fileManagerInstance == null)
-            throw new IllegalStateException("instance is null. Create your FileManager on Application class");
+            throw new IllegalStateException("FileManager instance is null. Please instantiate your FileManager on Application class");
         else
             return fileManagerInstance;
     }
-
 
     public void getFileFromLocalOrDownload(String url, String fileName, String subPath, OnFileDownloadCallback downloadCallback) {
         File baseFile = new File(basePath);
 
         if (subPath != null) {
-            baseFile = new File(baseFile, subPath);
+            if (subPath.contains("/")) {
+                String[] split = subPath.split("/");
+                for (String aSplit : split) {
+                    File newFile = new File(baseFile, aSplit);
+                    newFile.mkdir();
+                    baseFile = new File(baseFile, aSplit);
+                }
+            } else
+                baseFile = new File(baseFile, subPath);
         }
         baseFile.mkdirs();
+
 
         File outputFile = new File(baseFile, fileName);
         if (FileManagerUtil.fileAlreadyExists(outputFile)) {
