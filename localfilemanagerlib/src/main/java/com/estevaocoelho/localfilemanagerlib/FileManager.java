@@ -10,61 +10,75 @@ import java.io.File;
  */
 
 public class FileManager {
-    public static final String TAG = "FileManager";
+    static final String TAG = "FileManager";
     private static FileManager fileManagerInstance;
-
-    private Application application;
     private String basePath;
 
     /**
      * Constructor
      *
-     * @param application Application instance
-     * @param basePath    Base path of directory
+     * @param basePath Base path of directory
      */
-    private FileManager(Application application, String basePath) {
-        this.application = application;
+    private FileManager(String basePath) {
         this.basePath = basePath;
     }
 
     /**
      * Constructor
+     * Base path will be Android/data/your.application.package/files
      *
      * @param application Application instance
      */
     private FileManager(Application application) {
-        this.application = application;
         this.basePath = application.getBaseContext().getExternalCacheDir().getAbsolutePath();
     }
 
     /**
-     * Method to create a instance
+     * Method to create a FileManager instance with a customized base path
      *
-     * @param application Application instance
-     * @param basePath    Base path of directory
+     * @param basePath Base path of directory
      */
-    public static void create(Application application, String basePath) {
+    public static void create(String basePath) {
         if (fileManagerInstance == null) {
-            fileManagerInstance = new FileManager(application, basePath);
+            fileManagerInstance = new FileManager(basePath);
             Log.d(TAG, "Created new FileManager instance");
         } else Log.d(TAG, "FileManager instance already exists");
     }
 
-    public static void create(Application application) {
+    /**
+     * Method to create a FileManager instance with default base path
+     *
+     * @param application Application instance
+     */
+    static void create(Application application) {
         if (fileManagerInstance == null) {
             fileManagerInstance = new FileManager(application);
             Log.d(TAG, "Created new FileManager instance");
         } else Log.d(TAG, "FileManager instance already exists");
     }
 
-    public synchronized static FileManager getFileManagerInstance() {
+    /**
+     * Singleton to get File Manager Instance
+     *
+     * @return instance of FileManager
+     */
+    synchronized static FileManager getFileManagerInstance() {
         if (fileManagerInstance == null)
             throw new IllegalStateException("FileManager instance is null. Please instantiate your FileManager on Application class");
         else
             return fileManagerInstance;
     }
 
-    public void getFileFromLocalOrDownload(String url, String fileName, String subPath, OnFileDownloadCallback downloadCallback) {
+    /**
+     * Method to use to get a file:
+     * if file not exists method will download your archive and save in a file
+     *
+     * @param url              to download file
+     * @param fileName         this is a name of file. Need to have type like ".jpg", ".mp3", ".mp4"...
+     * @param subPath          Also base path you can choose a sub path that will concatenated with base path
+     * @param downloadCallback Callback to return your downloaded file
+     */
+    void getFileFromLocalOrDownload(String url, String fileName, String subPath, OnFileDownloadCallback downloadCallback) {
         File baseFile = new File(basePath);
 
         if (subPath != null) {
@@ -80,7 +94,6 @@ public class FileManager {
         }
         baseFile.mkdirs();
 
-
         File outputFile = new File(baseFile, fileName);
         if (FileManagerUtil.fileAlreadyExists(outputFile)) {
             downloadCallback.OnItemDownloaded(outputFile);
@@ -89,7 +102,15 @@ public class FileManager {
         }
     }
 
-    public void getFileFromLocalOrDownload(String url, String fileName, OnFileDownloadCallback downloadCallback) {
+    /**
+     * Method to use to get a file:
+     * if file not exists method will download your archive and save in a file
+     *
+     * @param url              to download file
+     * @param fileName         this is a name of file. Need to have type like ".jpg", ".mp3", ".mp4"...
+     * @param downloadCallback Callback to return your downloaded file
+     */
+    void getFileFromLocalOrDownload(String url, String fileName, OnFileDownloadCallback downloadCallback) {
         getFileFromLocalOrDownload(url, fileName, null, downloadCallback);
     }
 }
