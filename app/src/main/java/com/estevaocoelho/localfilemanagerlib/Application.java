@@ -9,6 +9,8 @@ public class Application extends android.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        //Instantiate FileManager with Application instance
         FileManager.create(this);
     }
 }

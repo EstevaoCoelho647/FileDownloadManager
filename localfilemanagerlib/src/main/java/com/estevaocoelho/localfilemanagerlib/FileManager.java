@@ -6,6 +6,7 @@ import android.util.Log;
 import java.io.File;
 
 /**
+ * FileManager class to control the downloads, configure base path and get FileManager instance
  * Created by estevaocoelho on 23/11/17.
  */
 
@@ -71,7 +72,7 @@ public class FileManager {
 
     /**
      * Method to use to get a file:
-     * if file not exists method will download your archive and save in a file
+     * if file not exists method will download your archive and save in a file in a sub path
      *
      * @param url              to download file
      * @param fileName         this is a name of file. Need to have type like ".jpg", ".mp3", ".mp4"...
@@ -81,8 +82,10 @@ public class FileManager {
     void getFileFromLocalOrDownload(String url, String fileName, String subPath, OnFileDownloadCallback downloadCallback) {
         File baseFile = new File(basePath);
 
+
         if (subPath != null) {
             if (subPath.contains("/")) {
+                //Create sub paths
                 String[] split = subPath.split("/");
                 for (String aSplit : split) {
                     File newFile = new File(baseFile, aSplit);
@@ -94,17 +97,20 @@ public class FileManager {
         }
         baseFile.mkdirs();
 
+        //Getting the file instance
         File outputFile = new File(baseFile, fileName);
-        if (FileManagerUtil.fileAlreadyExists(outputFile)) {
-            downloadCallback.OnItemDownloaded(outputFile);
+        if (outputFile.exists()) {
+            //if file already exists return file
+            downloadCallback.onItemDownloaded(outputFile);
         } else {
+            //if file not exists create file and download
             new FileManagerDownloader(outputFile, url, downloadCallback).execute();
         }
     }
 
     /**
      * Method to use to get a file:
-     * if file not exists method will download your archive and save in a file
+     * if file not exists method will download your archive and save in a file in base path
      *
      * @param url              to download file
      * @param fileName         this is a name of file. Need to have type like ".jpg", ".mp3", ".mp4"...

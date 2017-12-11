@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
         mImageView = findViewById(R.id.imageView);
         Button buttonDownload = findViewById(R.id.buttonDownload);
 
-
         buttonDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,14 +59,15 @@ public class MainActivity extends AppCompatActivity {
                 "success.jpg",
                 new OnFileDownloadCallback() {
                     @Override
-                    public void OnItemDownloaded(File file) {
+                    public void onItemDownloaded(File file) {
                         //Your file was downloaded with success!
                         Picasso.with(MainActivity.this).load(file).into(mImageView);
                         Toast.makeText(MainActivity.this, "success", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
-                    public void OnItemDownloadError() {
+                    public void onItemDownloadError() {
+                        //Error on download. Verify Log status
                         Toast.makeText(MainActivity.this, "failure", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -83,11 +83,10 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults.length <= 0
                         || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
 
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
+                    // permission denied
                     Toast.makeText(MainActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
                 } else {
-                    // permission was granted, yay! Do the
+                    // permission was granted
                     doDownload();
                 }
                 return;
