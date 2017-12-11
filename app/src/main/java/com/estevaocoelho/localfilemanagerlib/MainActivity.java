@@ -40,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 //                Verify permission
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    int result = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+                    int result = ContextCompat.checkSelfPermission(MainActivity.this,
+                            Manifest.permission.READ_EXTERNAL_STORAGE);
                     if (result != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(MainActivity.this,
                                 new String[]{permission.READ_EXTERNAL_STORAGE},
@@ -62,21 +63,23 @@ public class MainActivity extends AppCompatActivity {
                     public void onItemDownloaded(File file) {
                         //Your file was downloaded with success!
                         Picasso.with(MainActivity.this).load(file).into(mImageView);
-                        Toast.makeText(MainActivity.this, "success", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "success", Toast.LENGTH_SHORT)
+                                .show();
                     }
 
                     @Override
                     public void onItemDownloadError() {
                         //Error on download. Verify Log status
-                        Toast.makeText(MainActivity.this, "failure", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "failure", Toast.LENGTH_SHORT)
+                                .show();
                     }
                 }
         );
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
         switch (requestCode) {
             case 1: {
                 // If request is cancelled, the result arrays are empty.
@@ -84,7 +87,9 @@ public class MainActivity extends AppCompatActivity {
                         || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
 
                     // permission denied
-                    Toast.makeText(MainActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,
+                            "Permission denied to read your External storage",
+                            Toast.LENGTH_SHORT).show();
                 } else {
                     // permission was granted
                     doDownload();
