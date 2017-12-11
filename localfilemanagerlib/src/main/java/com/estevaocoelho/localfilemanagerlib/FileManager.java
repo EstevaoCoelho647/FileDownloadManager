@@ -1,11 +1,9 @@
 package com.estevaocoelho.localfilemanagerlib;
 
 import android.app.Application;
-import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by estevaocoelho on 23/11/17.
@@ -58,20 +56,18 @@ public class FileManager {
 
 
     public void getFileFromLocalOrDownload(String url, String fileName, String subPath, OnFileDownloadCallback downloadCallback) {
-        String pathToDownload = basePath;
         File baseFile = new File(basePath);
 
         if (subPath != null) {
-            pathToDownload = String.format("%s/%s", basePath, subPath);
-            baseFile = new File(pathToDownload);
+            baseFile = new File(baseFile, subPath);
         }
+        baseFile.mkdirs();
 
-        File file = new File(baseFile + "/" + fileName);
-
-        if (FileManagerUtil.fileAlreadyExists(file)) {
-            downloadCallback.OnItemDownloaded(file);
+        File outputFile = new File(baseFile, fileName);
+        if (FileManagerUtil.fileAlreadyExists(outputFile)) {
+            downloadCallback.OnItemDownloaded(outputFile);
         } else {
-            new FileManagerDownloader(file, url, downloadCallback).execute();
+            new FileManagerDownloader(outputFile, url, downloadCallback).execute();
         }
     }
 
