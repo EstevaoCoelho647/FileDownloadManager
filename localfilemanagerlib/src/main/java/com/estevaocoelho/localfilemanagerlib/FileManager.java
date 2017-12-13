@@ -51,7 +51,7 @@ public class FileManager {
      *
      * @param application Application instance
      */
-    static void create(Application application) {
+    public static void create(Application application) {
         if (fileManagerInstance == null) {
             fileManagerInstance = new FileManager(application);
             Log.d(TAG, "Created new FileManager instance");
@@ -79,7 +79,7 @@ public class FileManager {
      * @param subPath          Also base path you can choose a sub path that will concatenated with base path
      * @param downloadCallback Callback to return your downloaded file
      */
-    void getFileFromLocalOrDownload(String url, String fileName, String subPath, OnFileDownloadCallback downloadCallback) {
+    public void getFileFromLocalOrDownload(String url, String fileName, String subPath, OnFileDownloadCallback downloadCallback) {
         File baseFile = new File(basePath);
 
 
@@ -116,7 +116,7 @@ public class FileManager {
      * @param fileName         this is a name of file. Need to have type like ".jpg", ".mp3", ".mp4"...
      * @param downloadCallback Callback to return your downloaded file
      */
-    void getFileFromLocalOrDownload(String url, String fileName, OnFileDownloadCallback downloadCallback) {
+    public void getFileFromLocalOrDownload(String url, String fileName, OnFileDownloadCallback downloadCallback) {
         getFileFromLocalOrDownload(url, fileName, null, downloadCallback);
     }
 }

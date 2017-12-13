@@ -11,6 +11,6 @@ public class Application extends android.app.Application {
         super.onCreate();
 
         //Instantiate FileManager with Application instance
-        FileManager.create(this);
+        FileManager.create("basePath/anotherPath");
     }
 }
