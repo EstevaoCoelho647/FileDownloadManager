@@ -63,7 +63,7 @@ public class FileManager {
      *
      * @return instance of FileManager
      */
-    synchronized static FileManager getFileManagerInstance() {
+    public synchronized static FileManager getFileManagerInstance() {
         if (fileManagerInstance == null)
             throw new IllegalStateException("FileManager instance is null. Please instantiate your FileManager on Application class");
         else
